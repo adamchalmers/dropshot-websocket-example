@@ -3,13 +3,16 @@ use reqwest::StatusCode;
 #[tokio::main]
 async fn main() {
     env_logger::init();
-    let client = reqwest::ClientBuilder::new().build().unwrap();
+    let client = reqwest::ClientBuilder::new()
+        .danger_accept_invalid_certs(true)
+        .build()
+        .unwrap();
     let port: u16 = std::env::var("LISTEN_PORT")
         .unwrap_or("8080".to_string())
         .parse()
         .unwrap();
     let req = client
-        .get(format!("http://0.0.0.0:{port}/counter"))
+        .get(format!("https://0.0.0.0:{port}/counter"))
         .header(reqwest::header::CONNECTION, "Upgrade")
         .header(reqwest::header::UPGRADE, "websocket")
         .header(reqwest::header::SEC_WEBSOCKET_VERSION, "13")

@@ -9,6 +9,7 @@ use dropshot::ApiDescription;
 use dropshot::ConfigDropshot;
 use dropshot::ConfigLogging;
 use dropshot::ConfigLoggingLevel;
+use dropshot::ConfigTls;
 use dropshot::HttpServerStarter;
 use dropshot::Query;
 use dropshot::RequestContext;
@@ -35,7 +36,10 @@ async fn main() -> Result<(), String> {
             port,
         )),
         request_body_max_bytes: 1024,
-        tls: None,
+        tls: Some(ConfigTls::AsFile {
+            cert_file: "certs/server.crt".to_string().into(),
+            key_file: "certs/server.key".to_string().into(),
+        }),
     };
 
     // For simplicity, we'll configure an "info"-level logger that writes to
